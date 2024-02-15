@@ -1,0 +1,118 @@
+#default_stages: [commit, push]
+fail_fast: True # set to True to have pre-commit stop running hooks after the first failure
+
+default_language_version:
+  # force all unspecified python hooks to run python3
+  python: python3
+
+repos:
+  # - repo: https://github.com/kynan/nbstripout
+  #   rev: 0.6.0
+  #   hooks:
+  #     - id: nbstripout
+
+  # - repo: https://github.com/kynan/nbstripout
+  #   rev: 0.6.0
+  #   hooks:
+  #     - id: nbstripout
+
+  # - repo: https://github.com/pre-commit/pre-commit-hooks
+  #   rev: v4.3.0 # Use the ref you want to point at
+  #   hooks:
+  #     # no >>> <<< in files
+  #     - id: check-merge-conflict
+  #     # forbid direct commits to master or dev
+  #     - id: no-commit-to-branch
+  #       args: ["--branch", "master"]
+  #     - id: check-added-large-files
+  #       args: ["--maxkb=500"]
+  #     - id: check-json
+  #       exclude: "^.vscode/" # vscode jsons should not be validated, even on '--all-files'
+  #     - id: detect-aws-credentials
+  #       args: ["--allow-missing-credentials"]
+  #     - id: detect-private-key
+
+  - repo: local
+    hooks:
+      # **********************
+      # neurohelp hooks
+      # **********************
+      # - id: commit-msg-validator
+      #   name: check commit msg length and format
+      #   description: >
+      #     Check whether the current commit message follows commiting rules.
+      #   entry: commit_msg_validator
+      #   # args: [--verbose]
+      #   language: python
+      #   stages: [commit-msg]
+      #   always_run: True # run even if user does not add --all-files
+
+      # - id: todo-comment-validator
+      #   name: check that TODOs (and similar) follow conventions
+      #   description: >
+      #     Validate TODO/FUTURE/CODEREV (and more) comments.
+      #   entry: todo_comment_validator
+      #   # args: [--verbose]
+      #   stages: [commit]
+      #   language: python
+      #   types: [file, python]
+
+      # # **********************
+      # # template hooks
+      # # **********************
+      # - id: restricted-filenames
+      #   name: check commits for unexpected file extensions
+      #   entry: These file extensions are unusual and should be checked
+      #   language: fail
+      #   files: '.*\.(rej)' # '.*\.(xlsx|doc)'
+
+      # - id: isort
+      #   name: isort - sorts imports
+      #   stages: [commit]
+      #   language: system
+      #   entry: isort
+      #   types: [python]
+
+      # - id: flake8
+      #   name: flake8 - warn about style inconsistencies
+      #   stages: [commit]
+      #   language: system
+      #   entry: flake8
+      #   types: [python]
+      #   exclude: setup.py
+
+      # - id: darglint
+      #   name: darglint - check functional docstring aligns with signature
+      #   stages: [commit]
+      #   language: system
+      #   entry: darglint
+      #   types: [python]
+      #   exclude: setup.py
+
+      # - id: mypy
+      #   name: mypy - static type checker for type hints
+      #   stages: [commit]
+      #   language: system
+      #   entry: mypy
+      #   types: [python]
+      #   pass_filenames: False #no filenames will be passed to the hook, run once
+      #   args: [--exclude, setup.py] #othewise, fails because of duplicate setup.py
+
+      # - id: pytest
+      #   name: pytest - runs project tests
+      #   stages: [commit]
+      #   language: system
+      #   entry: nhctl test.run
+      #   types: [python]
+      #   pass_filenames: False #no filenames will be passed to the hook, run once
+      #   args: [-n, auto, --cov, --durations, "3"] # using forks - it's currently faster ~>20sec than n=1 (on linux)
+      #   verbose: True
+
+      - id: empty-package
+        name: empty-package - demos console scripts
+        stages: [commit]
+        language: system
+        entry: empty-package
+        types: [python]
+        pass_filenames: False # no filenames will be passed to the hook, run once
+        verbose: True
